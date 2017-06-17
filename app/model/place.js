@@ -5,13 +5,32 @@ var openingTimes = new Schema({
     time: String, 
     closed: Boolean, 
  });
-var reviewSchema= new Schema ({
-    user: {type: String, required: true},
-    review_date :{ type: Date, default :Date.now}, 
-    message: String,
-    vote: {type: Number, default:0, min: 0, max: 5 }, 
-})
-var places = new Schema ({ 
+ 
+ var reviewSchema= new Schema ({
+     user: {type: String},
+     review_date :{ type: Date, default :Date.now}, 
+     message: String,
+     vote: {type: Number, default:0, min: 0, max: 5 }, 
+ })
+
+ var priceSchema=new Schema({
+ 	price:Number,
+ 	discountedPrice:Number,
+ 	isDiscount:{type:Boolean,default:false}
+ })
+
+
+ var productSchema =new Schema({
+ 	name:String,
+ 	description:String,
+ 	image_url:String,
+ 	reviews:[reviewSchema],
+ 	price:priceSchema,
+ 	avgRating:Number	
+	
+ })
+ 
+var placeSchema = new Schema ({ 
     name : String,
     address : String, 
     coordinates: [Number],
@@ -19,5 +38,9 @@ var places = new Schema ({
     avgRating: {type:Number, default:0},
     rating: [reviewSchema],
     openingHour: [openingTimes],
-})
-module.exports = mongoose.model('Place',places)
+	reviews:[reviewSchema],
+	products:[productSchema]
+
+});
+
+module.exports = mongoose.model('Place',placeSchema);
